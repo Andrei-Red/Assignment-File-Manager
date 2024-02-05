@@ -1,0 +1,25 @@
+{
+  "name": "filemanager",
+  "version": "1.0.0",
+  "description": "Assignment: File Manager",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Andrei-Red/Assignment-File-Manager.git"
+  },
+  "keywords": [
+    "File",
+    "Manager"
+  ],
+  "author": "denisenko.andrei",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Andrei-Red/Assignment-File-Manager/issues"
+  },
+  "homepage": "https://github.com/Andrei-Red/Assignment-File-Manager#readme"
+}
