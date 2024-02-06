@@ -10,6 +10,7 @@ import {remove} from "./fs/delete.js";
 import {calculateHash} from "./hash/calcHash.js";
 import {list} from "./fs/list.js";
 import {compress} from "./compression/compress.js";
+import {decompress} from "./compression/decompress.js";
 
 export class App {
     _catalog
@@ -42,11 +43,11 @@ export class App {
     }
     listener() {
         process.stdin.on("data", (inputStdin) => {
-            this.workFile = this._catalog + "\\" + inputStdin.toString().trim().split(" ")[1];
-            this.toFile = this._catalog + "\\" + inputStdin.toString().trim().split(" ")[2];
+            this.inputStdin = inputStdin
+            this.workFile = this._catalog + "\/" +  this.inputStdin.toString().trim().split(" ")[1];
+            this.toFile = this._catalog + "\/" +  this.inputStdin.toString().trim().split(" ")[2];
 
-            const [currentCommand, flag] = inputStdin.toString().trim().split(" ")
-            console.info('currentCommand', {currentCommand, flag})
+            const [currentCommand, flag] =  this.inputStdin.toString().trim().split(" ")
 
             switch (currentCommand) {
                 case ".exit":
@@ -109,6 +110,14 @@ export class App {
                     this.logHandler.log("Invalid input");
             }
         });
+
+        process.on('uncaughtException', (error) => {
+            console.info('Uncaught Exception:', error);
+        });
+
+        process.on('unhandledRejection', (reason, promise) => {
+            console.info('Unhandled Rejection:', reason);
+        });
     }
 
     onOs (flag) {
@@ -140,8 +149,8 @@ export class App {
     }
 
     onUp () {
-        if (this._catalog.split("\\").length > 1) {
-            this._catalog = this._catalog.split("\\").slice(0, -1).join("\\");
+        if (this._catalog.split("\/").length > 1) {
+            this._catalog = this._catalog.split("\/").slice(0, -1).join("\/");
             this.logHandler.log(`You are currently in ${this._catalog}`);
         }
     }
@@ -180,11 +189,11 @@ export class App {
     }
 
     onSd () {
-        fs.stat(this.workFile, function (err, stats) {
+        fs.stat(this.workFile, (err, stats) => {
             if (err || stats.isFile()) {
                 console.info("Directory not found");
             } else {
-                this._catalog = this._catalog + "\\" + inputStdin.toString().trim().split(" ")[1];
+                this._catalog = this._catalog + "\/" +  this.inputStdin.toString().trim().split(" ")[1];
                 console.info(`You are currently in ${this._catalog}`);
             }
         });
